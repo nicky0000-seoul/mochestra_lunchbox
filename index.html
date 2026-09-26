@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lunchbox 맛집 검색</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <!-- 상단 탭 -->
+    <header class="top">
+      <nav class="tabs" role="tablist">
+        <button class="tab" role="tab" data-view="nearby" aria-selected="true">내 주변 식당</button>
+        <button class="tab" role="tab" data-view="map" aria-selected="false">지도 검색</button>
+      </nav>
+    </header>
+
+    <!-- 화면 1: 내 주변 식당 -->
+    <section id="view-nearby" class="view">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="nearby-search" type="search" placeholder="식당 이름, 메뉴로 검색" autocomplete="off" />
+      </label>
+
+      <!-- 정렬 / 음식 종류 필터 -->
+      <div class="chips">
+        <div class="chip-group" id="sort-chips" role="radiogroup" aria-label="정렬"></div>
+        <span class="chip-divider" aria-hidden="true"></span>
+        <div class="chip-group" id="category-chips" role="radiogroup" aria-label="음식 종류"></div>
+      </div>
+
+      <div id="nearby-body"></div>
+    </section>
+
+    <!-- 화면 2: 지도 검색 -->
+    <section id="view-map" class="view" hidden>
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="map-search" type="search" placeholder="지역, 식당, 메뉴 검색 후 Enter" autocomplete="off" enterkeyhint="search" />
+      </label>
+
+      <div class="map-wrap">
+        <div id="map" class="map" aria-label="지도"></div>
+        <div id="map-loading" class="map-loading" hidden><span class="spinner"></span>불러오는 중…</div>
+        <button id="research" class="map-btn research" hidden>↻ 이 지역에서 다시 검색</button>
+        <button id="locate" class="map-btn locate" aria-label="내 위치로">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8.5"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/></svg>
+        </button>
+        <div id="map-sheet" class="map-sheet"></div>
+        <div id="toast" class="toast" role="status" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
