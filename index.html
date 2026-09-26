@@ -4,9 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Lunchbox 맛집 검색</title>
+  <script>
+    // 저장된 테마를 첫 렌더 전에 적용해 깜빡임을 막음
+    try {
+      const t = localStorage.getItem("mochestra-theme");
+      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+    } catch {}
+  </script>
+  <link rel="stylesheet" href="tokens.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="tab-lunch">
   <main class="app">
     <!-- 상단 탭 -->
     <header class="top">
@@ -14,6 +22,7 @@
         <button class="tab" role="tab" data-view="nearby" aria-selected="true">내 주변 식당</button>
         <button class="tab" role="tab" data-view="map" aria-selected="false">지도 검색</button>
       </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button"></button>
     </header>
 
     <!-- 화면 1: 내 주변 식당 -->
@@ -55,5 +64,6 @@
 
   <script src="config.js"></script>
   <script src="app.js"></script>
+  <script src="theme.js"></script>
 </body>
 </html>

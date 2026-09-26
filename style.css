@@ -1,14 +1,5 @@
 /* 기준 기기: iPad Pro 12.9" (세로 1024 × 1366, 가로 1366 × 1024) */
-:root {
-  --bg: #000;
-  --yellow: #dccd66;
-  --yellow-strong: #f0dc4a;
-  --surface: #0b0b0b;
-  --card: #fff;
-  --map: #353130;
-  --muted: #666;
-  --radius: 12px;
-}
+/* 색·카드 스펙은 tokens.css(MOCHESTRA 공통)에서 가져옴. body.tab-lunch 가 런치박스 accent 를 고름 */
 
 * { box-sizing: border-box; }
 
@@ -17,13 +8,19 @@
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: #fff;
+  background: var(--surface);
+  color: var(--ink);
   font-family: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
   -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s, color 0.2s;
 }
 
 button { font-family: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--baton);
+  outline-offset: 2px;
+}
 
 .app {
   max-width: 1280px;
@@ -36,17 +33,24 @@ button { font-family: inherit; }
   position: sticky;
   top: 0;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 40px 0 24px;
-  background: var(--bg);
+  background: var(--surface);
 }
 
 .tabs {
+  flex: 1;
   display: flex;
   gap: 4px;
   padding: 4px;
-  border: 1px solid var(--yellow);
-  border-radius: calc(var(--radius) + 4px);
-  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: calc(var(--radius-inner) + 4px);
+  background: var(--surface-raised);
+  box-shadow: var(--card-shadow);
+  -webkit-backdrop-filter: var(--card-blur);
+  backdrop-filter: var(--card-blur);
 }
 
 .tab {
@@ -54,17 +58,43 @@ button { font-family: inherit; }
   min-height: 56px;
   font-size: 22px;
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-inner);
   background: transparent;
-  color: var(--yellow);
+  color: var(--ink-muted);
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
+.tab:hover { color: var(--ink); }
+
 .tab[aria-selected="true"] {
-  background: var(--yellow);
-  color: #000;
+  background: var(--accent-fill);
+  color: var(--on-accent);
   font-weight: 600;
+}
+
+/* 테마 전환 */
+.theme-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 0 18px;
+  font-size: 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--inner-border);
+  background: var(--surface-raised);
+  color: var(--ink-soft);
+  cursor: pointer;
+  -webkit-backdrop-filter: var(--card-blur);
+  backdrop-filter: var(--card-blur);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+  border-color: var(--accent);
 }
 
 /* 검색창 */
@@ -73,9 +103,14 @@ button { font-family: inherit; }
   align-items: center;
   gap: 12px;
   padding: 0 20px;
-  border-radius: var(--radius);
-  background: var(--yellow);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-inner);
+  background: var(--surface-raised);
+  box-shadow: var(--card-shadow);
+  -webkit-backdrop-filter: var(--card-blur);
+  backdrop-filter: var(--card-blur);
   cursor: text;
+  transition: box-shadow 0.15s, border-color 0.15s;
 }
 
 .search svg {
@@ -83,7 +118,7 @@ button { font-family: inherit; }
   width: 24px;
   height: 24px;
   fill: none;
-  stroke: #000;
+  stroke: var(--ink-muted);
   stroke-width: 2.2;
   stroke-linecap: round;
 }
@@ -96,12 +131,16 @@ button { font-family: inherit; }
   font-family: inherit;
   border: none;
   background: transparent;
-  color: #000;
+  color: var(--ink);
   outline: none;
 }
 
-.search input::placeholder { color: rgba(0, 0, 0, 0.45); }
-.search:focus-within { box-shadow: 0 0 0 3px rgba(220, 205, 102, 0.4); }
+.search input::placeholder { color: var(--ink-muted); }
+
+.search:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--card-shadow), 0 0 0 3px var(--accent-soft);
+}
 
 /* 6. 정렬 / 필터 칩 */
 .chips {
@@ -121,7 +160,7 @@ button { font-family: inherit; }
   flex: none;
   width: 1px;
   height: 28px;
-  background: #333;
+  background: var(--line);
 }
 
 .chip {
@@ -129,18 +168,21 @@ button { font-family: inherit; }
   min-height: 44px;
   padding: 0 18px;
   font-size: 17px;
-  border: 1px solid #444;
-  border-radius: 999px;
-  background: var(--surface);
-  color: #ddd;
+  border: 1px solid var(--inner-border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-inner);
+  color: var(--ink-soft);
   cursor: pointer;
   white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
+.chip:hover { border-color: var(--accent); color: var(--ink); }
+
 .chip[aria-checked="true"] {
-  border-color: var(--yellow);
-  background: var(--yellow);
-  color: #000;
+  border-color: var(--accent-fill);
+  background: var(--accent-fill);
+  color: var(--on-accent);
   font-weight: 600;
 }
 
@@ -151,7 +193,7 @@ button { font-family: inherit; }
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
-  gap: 20px;
+  gap: var(--card-gap);
 }
 
 .result {
@@ -159,17 +201,23 @@ button { font-family: inherit; }
   align-items: center;
   gap: 20px;
   padding: 20px;
-  border: 3px solid transparent;
-  border-radius: var(--radius);
-  background: var(--card);
-  color: #000;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  box-shadow: var(--card-shadow);
+  -webkit-backdrop-filter: var(--card-blur);
+  backdrop-filter: var(--card-blur);
+  color: var(--ink);
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
+.result:hover { border-color: var(--accent); }
+
+/* 선택: 테두리 + 왼쪽 막대 (색만으로 구분하지 않도록 막대를 함께 씀) */
 .result.selected {
-  border-color: var(--yellow-strong);
-  box-shadow: inset 8px 0 0 var(--yellow-strong);
+  border-color: var(--accent);
+  box-shadow: var(--card-shadow), inset 6px 0 0 var(--accent), 0 0 0 2px var(--accent);
 }
 
 .thumb {
@@ -178,8 +226,8 @@ button { font-family: inherit; }
   height: 104px;
   display: grid;
   place-items: center;
-  border-radius: 10px;
-  background: #f3efe0;
+  border-radius: var(--radius-inner);
+  background: var(--accent-soft);
   font-size: 48px;
 }
 
@@ -189,6 +237,7 @@ button { font-family: inherit; }
   margin: 0 0 6px;
   font-size: 23px;
   font-weight: 600;
+  color: var(--ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -198,13 +247,13 @@ button { font-family: inherit; }
 .sub {
   margin: 0;
   font-size: 16px;
-  color: var(--muted);
+  color: var(--ink-muted);
 }
 
 .sub { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
 
 .link {
-  color: #1a73e8;
+  color: var(--accent-strong);
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
@@ -221,11 +270,12 @@ button { font-family: inherit; }
 .more:disabled { opacity: 0.6; cursor: default; }
 
 /* 7. 로딩: 카드 모양 뼈대 */
-.skeleton { cursor: default; background: #1a1a1a; }
+.skeleton { cursor: default; }
+.skeleton:hover { border-color: var(--card-border); }
 
 .skeleton .thumb,
 .skeleton .line {
-  background: linear-gradient(90deg, #262626 0%, #333 50%, #262626 100%);
+  background: linear-gradient(90deg, var(--surface-inner) 0%, var(--line) 50%, var(--surface-inner) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.2s infinite linear;
 }
@@ -241,7 +291,7 @@ button { font-family: inherit; }
 
 .loading-caption {
   margin: 24px 0 0;
-  color: #aaa;
+  color: var(--ink-muted);
   font-size: 17px;
 }
 
@@ -250,14 +300,17 @@ button { font-family: inherit; }
   margin-top: 64px;
   padding: 48px 32px;
   text-align: center;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid #222;
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  -webkit-backdrop-filter: var(--card-blur);
+  backdrop-filter: var(--card-blur);
 }
 
 .notice .icon { font-size: 56px; }
-.notice h2 { margin: 16px 0 8px; font-size: 26px; }
-.notice p { margin: 0 auto; max-width: 480px; color: #aaa; font-size: 18px; line-height: 1.6; }
+.notice h2 { margin: 16px 0 8px; font-size: 26px; color: var(--ink); }
+.notice p { margin: 0 auto; max-width: 480px; color: var(--ink-soft); font-size: 18px; line-height: 1.6; }
 
 .notice .actions {
   display: flex;
@@ -271,22 +324,30 @@ button { font-family: inherit; }
   min-height: 52px;
   padding: 0 28px;
   font-size: 18px;
-  border-radius: var(--radius);
-  border: 1px solid var(--yellow);
-  background: transparent;
-  color: var(--yellow);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--inner-border);
+  background: var(--surface-inner);
+  color: var(--ink);
   cursor: pointer;
+  transition: border-color 0.15s;
 }
 
-.btn.primary { background: var(--yellow); color: #000; font-weight: 600; }
+.btn:hover { border-color: var(--accent); }
+
+.btn.primary {
+  border-color: var(--accent-fill);
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  font-weight: 600;
+}
 
 .banner {
   margin: 20px 0 0;
   padding: 14px 18px;
-  border-radius: var(--radius);
-  background: #1d1a0c;
-  border: 1px solid #4a4420;
-  color: var(--yellow);
+  border-radius: var(--radius-inner);
+  background: var(--accent-soft);
+  border: 1px solid var(--inner-border);
+  color: var(--ink);
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -298,8 +359,9 @@ button { font-family: inherit; }
   flex: none;
   border: none;
   background: none;
-  color: #fff;
+  color: var(--accent-strong);
   font-size: 16px;
+  font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -310,17 +372,18 @@ button { font-family: inherit; }
   margin-top: 24px;
   height: calc(100dvh - 280px);
   min-height: 560px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--card-border);
   overflow: hidden;
 }
 
 .map {
   position: absolute;
   inset: 0;
-  background: var(--map);
+  background: var(--surface-inner);
 }
 
-/* 카카오 지도 위에 올리는 식당 핀 */
+/* 카카오 지도 위에 올리는 식당 핀. 지도 타일은 테마와 상관없이 밝아서 흰 테두리로 띄움 */
 .kpin {
   position: relative;
   display: block;
@@ -330,8 +393,8 @@ button { font-family: inherit; }
   padding: 0;
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
-  background: var(--yellow);
-  border: 2px solid #000;
+  background: var(--accent-fill);
+  border: 2px solid #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
@@ -343,11 +406,11 @@ button { font-family: inherit; }
   width: 36px;
   height: 36px;
   background: #fff;
-  border-color: var(--yellow-strong);
-  border-width: 3px;
+  border-color: var(--accent-fill);
+  border-width: 4px;
 }
 
-/* 내 위치 */
+/* 내 위치: 지도 관례대로 파란 점 */
 .kme {
   width: 22px;
   height: 22px;
@@ -375,7 +438,7 @@ button { font-family: inherit; }
   width: 24px;
   height: 24px;
   border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--yellow);
+  border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -385,9 +448,9 @@ button { font-family: inherit; }
 .map-btn {
   position: absolute;
   z-index: 2;
-  border: none;
+  border: 1px solid var(--inner-border);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .research {
@@ -396,9 +459,10 @@ button { font-family: inherit; }
   transform: translateX(-50%);
   min-height: 48px;
   padding: 0 24px;
-  border-radius: 999px;
-  background: var(--yellow);
-  color: #000;
+  border-radius: var(--radius-pill);
+  border-color: var(--accent-fill);
+  background: var(--accent-fill);
+  color: var(--on-accent);
   font-size: 17px;
   font-weight: 600;
 }
@@ -411,18 +475,19 @@ button { font-family: inherit; }
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface-overlay);
 }
 
 .locate svg {
   width: 28px;
   height: 28px;
   fill: none;
-  stroke: #000;
+  stroke: var(--ink);
   stroke-width: 2;
   stroke-linecap: round;
 }
 
+/* 지도 위 시트: 밝은 지도 위에서도 읽히도록 불투명 overlay 면 */
 .map-sheet {
   position: absolute;
   z-index: 2;
@@ -436,19 +501,16 @@ button { font-family: inherit; }
   gap: 20px;
   min-height: 120px;
   padding: 20px;
-  border-radius: var(--radius);
-  background: rgba(40, 37, 36, 0.94);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--inner-border);
+  border-radius: var(--radius-card);
+  background: var(--surface-overlay);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
   font-size: 19px;
+  color: var(--ink);
 }
 
-.map-sheet .thumb { width: 88px; height: 88px; font-size: 40px; background: #4a4442; }
-.map-sheet .hint { color: #bbb; width: 100%; text-align: center; }
-.map-sheet .info h3 { color: #fff; }
-.map-sheet .link { color: var(--yellow); }
-.map-sheet .meta,
-.map-sheet .sub { color: #bbb; }
+.map-sheet .thumb { width: 88px; height: 88px; font-size: 40px; }
+.map-sheet .hint { color: var(--ink-soft); width: 100%; text-align: center; }
 
 .toast {
   position: absolute;
@@ -457,7 +519,7 @@ button { font-family: inherit; }
   left: 50%;
   transform: translateX(-50%);
   padding: 12px 20px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(0, 0, 0, 0.85);
   color: #fff;
   font-size: 16px;
@@ -476,5 +538,6 @@ button { font-family: inherit; }
   .app { padding: 0 16px 32px; }
   .top { padding-top: 24px; }
   .tab { font-size: 18px; }
+  .theme-toggle { padding: 0 14px; font-size: 14px; }
   .thumb { width: 80px; height: 80px; font-size: 36px; }
 }

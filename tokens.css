@@ -1,0 +1,188 @@
+/*
+ * MOCHESTRA 공통 디자인 토큰
+ * - 라이트: 따뜻한 종이 배경 + 흰 카드
+ * - 다크: 순수 검정 배경 + 유리(반투명) 카드
+ * 테마는 시스템 설정을 따르고, <html data-theme="light|dark">로 강제할 수 있음
+ */
+
+:root {
+  color-scheme: light;
+
+  /* 배경 */
+  --surface: #f6f1ea;
+  --surface-raised: #ffffff;
+  --surface-inner: #faf7f2; /* 카드 안쪽 박스 */
+  --surface-overlay: #ffffff; /* 지도·사진 위에 띄우는 불투명 면 */
+
+  /* 글자·선 */
+  --ink: #241c15;
+  --ink-soft: #4a4036;
+  --ink-muted: #6b6154;
+  --line: #e4dccb;
+
+  /* 카드 */
+  --card-border: transparent;
+  --card-shadow: 0 4px 12px rgba(36, 28, 21, 0.08);
+  --card-blur: none;
+  --inner-border: var(--line);
+
+  /* 탭별 accent: 면(primary) / 글자(strong) */
+  --baton: #b3721f;
+  --baton-strong: #8f5a16;
+  --morning: #d1502f;
+  --morning-strong: #b23f22;
+  --lunch: #6c7d3f;
+  --lunch-strong: #56652f;
+  --emotion: #3f7b72;
+  --emotion-strong: #306159;
+  --video: #8c4f98;
+  --video-strong: #7a3f86;
+
+  /* 상태 */
+  --success: #3a7442;
+  --warning: #8f5d07;
+  --danger: #b8352a;
+  --info: #3a6a8c;
+
+  /* 버튼·선택 면 위 글자. 라이트는 strong 면 위 흰 글자 */
+  --on-accent: #ffffff;
+
+  /* 크기 */
+  --radius-card: 28px;
+  --radius-inner: 16px;
+  --radius-pill: 999px;
+  --radius-tabbar: 24px;
+  --card-gap: 24px;
+}
+
+/* 다크 토큰: 시스템이 다크이고 라이트를 강제하지 않았을 때 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --surface: #000000;
+    --surface-raised: rgba(255, 255, 255, 0.14);
+    --surface-inner: rgba(255, 255, 255, 0.06);
+    --surface-overlay: #242424;
+
+    --ink: #f1ede4;
+    --ink-soft: #c9c3b6;
+    --ink-muted: #a8a295;
+    --line: rgba(255, 255, 255, 0.12);
+
+    --card-border: rgba(255, 255, 255, 0.35);
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    --card-blur: blur(16px) saturate(140%);
+    --inner-border: rgba(255, 255, 255, 0.2);
+
+    --baton: #d17f16;
+    --baton-strong: #eb9e3c;
+    --morning: #e57153;
+    --morning-strong: #ec9b86;
+    --lunch: #859c46;
+    --lunch-strong: #a0b860;
+    --emotion: #4aa194;
+    --emotion-strong: #6ebcb1;
+    --video: #b77ec3;
+    --video-strong: #cba0d3;
+
+    --success: #7ed48a;
+    --warning: #ffab4a;
+    --danger: #ff7a7a;
+    --info: #6cb4ff;
+
+    --on-accent: #1f1f1f;
+  }
+}
+
+/* 다크 토큰: 직접 다크를 고른 경우 (위 블록과 같은 값) */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface: #000000;
+  --surface-raised: rgba(255, 255, 255, 0.14);
+  --surface-inner: rgba(255, 255, 255, 0.06);
+  --surface-overlay: #242424;
+
+  --ink: #f1ede4;
+  --ink-soft: #c9c3b6;
+  --ink-muted: #a8a295;
+  --line: rgba(255, 255, 255, 0.12);
+
+  --card-border: rgba(255, 255, 255, 0.35);
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --card-blur: blur(16px) saturate(140%);
+  --inner-border: rgba(255, 255, 255, 0.2);
+
+  --baton: #d17f16;
+  --baton-strong: #eb9e3c;
+  --morning: #e57153;
+  --morning-strong: #ec9b86;
+  --lunch: #859c46;
+  --lunch-strong: #a0b860;
+  --emotion: #4aa194;
+  --emotion-strong: #6ebcb1;
+  --video: #b77ec3;
+  --video-strong: #cba0d3;
+
+  --success: #7ed48a;
+  --warning: #ffab4a;
+  --danger: #ff7a7a;
+  --info: #6cb4ff;
+
+  --on-accent: #1f1f1f;
+}
+
+/*
+ * 탭 컨텍스트: 컴포넌트는 --accent 계열만 참조하고, 탭 클래스가 실제 색을 고름
+ * --accent        큰 제목·숫자, 아이콘, 테두리 (대비 3:1 이상)
+ * --accent-strong 작은 글자, 링크 (대비 4.5:1 이상)
+ * --accent-fill   버튼·선택 면. --on-accent 글자와 4.5:1 이상
+ * --accent-soft   조언 박스, 선택 배경처럼 넓은 면에 까는 옅은 색
+ */
+.tab-baton,
+:root {
+  --accent: var(--baton);
+  --accent-strong: var(--baton-strong);
+}
+.tab-morning {
+  --accent: var(--morning);
+  --accent-strong: var(--morning-strong);
+}
+.tab-lunch {
+  --accent: var(--lunch);
+  --accent-strong: var(--lunch-strong);
+}
+.tab-emotion {
+  --accent: var(--emotion);
+  --accent-strong: var(--emotion-strong);
+}
+.tab-video {
+  --accent: var(--video);
+  --accent-strong: var(--video-strong);
+}
+
+:root,
+.tab-baton,
+.tab-morning,
+.tab-lunch,
+.tab-emotion,
+.tab-video {
+  --accent-fill: var(--accent-strong);
+  /* 라이트는 8%까지: 이 위에 strong 글자를 올려도 4.5:1 유지 */
+  --accent-soft: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* 다크에서는 primary 면 위에 어두운 글자를 올림 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]),
+  :root:not([data-theme="light"]) :is(.tab-baton, .tab-morning, .tab-lunch, .tab-emotion, .tab-video) {
+    --accent-fill: var(--accent);
+    --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  }
+}
+:root[data-theme="dark"],
+:root[data-theme="dark"] :is(.tab-baton, .tab-morning, .tab-lunch, .tab-emotion, .tab-video) {
+  --accent-fill: var(--accent);
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+}
