@@ -1,0 +1,49 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Generate runtime config when a key is configured
+        env:
+          KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+        run: |
+          if [ -n "$KAKAO_APP_KEY" ]; then
+            node -e 'require("node:fs").writeFileSync("config.js", `window.KAKAO_APP_KEY = ${JSON.stringify(process.env.KAKAO_APP_KEY)};\n`)'
+          else
+            echo "KAKAO_APP_KEY is not configured; deploying without Kakao API features."
+          fi
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
